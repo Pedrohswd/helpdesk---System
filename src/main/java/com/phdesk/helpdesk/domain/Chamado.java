@@ -1,20 +1,32 @@
 package com.phdesk.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.phdesk.helpdesk.domain.enums.Prioridade;
 import com.phdesk.helpdesk.domain.enums.Status;
+import com.phdesk.helpdesk.domain.Cliente;
+import com.phdesk.helpdesk.domain.Tecnico;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
-
+@Entity
 public class Chamado {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataAbertura = LocalDate.now();
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataFechamento;
     private Prioridade prioridade;
     private Status status;
     private String titulo;
     private String observacoes;
+    @ManyToOne
+    @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     public Chamado() {
