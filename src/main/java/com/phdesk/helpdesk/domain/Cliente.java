@@ -1,5 +1,6 @@
 package com.phdesk.helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phdesk.helpdesk.domain.Pessoa;
 import com.phdesk.helpdesk.domain.enums.Perfil;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 public class Cliente extends Pessoa {
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Chamado> chamados = new ArrayList<>();
 
