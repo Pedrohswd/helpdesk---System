@@ -24,6 +24,7 @@ public class TecnicoDTO {
     protected LocalDate dataCriacao = LocalDate.now();
 
     public TecnicoDTO(){
+        addPerfil(Perfil.CLIENTE);
 
     }
 
