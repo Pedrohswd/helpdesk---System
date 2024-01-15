@@ -8,6 +8,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +16,13 @@ import java.util.stream.Collectors;
 
 public class TecnicoDTO {
     protected Integer id;
+    @NotNull(message = "O campo nome está em branco!")
     protected String nome;
+    @NotNull(message = "O campo cpf está em branco!")
     protected String cpf;
+    @NotNull(message = "O campo email está em branco!")
     protected String email;
+    @NotNull(message = "O campo senha está em branco!")
     protected String senha;
     protected Set<Integer> perfis = new HashSet<>();
     @JsonFormat(pattern = "dd/MM/yyyy")
