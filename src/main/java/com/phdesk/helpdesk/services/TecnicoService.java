@@ -47,4 +47,21 @@ public class TecnicoService {
             throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
         }
     }
+
+    public Tecnico update(Integer id, TecnicoDTO tecnicoDTO) {
+        tecnicoDTO.setId(id);
+        Tecnico oldObj = findByID(id);
+        validaPorCpfEmail(tecnicoDTO);
+        oldObj = new Tecnico(tecnicoDTO);
+        return tecnicoRepository.save(oldObj);
+    }
+
+    public void delete(Integer id) {
+        Tecnico obj = findByID(id);
+        if(obj.getChamados().size() > 0){
+            throw new DataIntegrityViolationException("Técnico possui ordens de serviços e não pode ser deletado!");
+        }
+        tecnicoRepository.deleteById(id);
+
+    }
 }

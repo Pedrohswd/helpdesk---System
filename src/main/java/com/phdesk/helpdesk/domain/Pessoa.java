@@ -2,6 +2,7 @@ package com.phdesk.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.phdesk.helpdesk.domain.enums.Perfil;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public abstract class Pessoa {
     protected String nome;
     @Column(unique = true)
     protected String cpf;
+    @CPF
     @Column(unique = true)
     protected String email;
     protected String senha;

@@ -22,22 +22,37 @@ public class TecnicoController {
     private TecnicoService tecnicoService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id){
+    public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id) {
         Tecnico obj = tecnicoService.findByID(id);
         return ResponseEntity.ok().body(new TecnicoDTO(obj));
     }
+
     @GetMapping
-    public ResponseEntity<List<TecnicoDTO>> findAll(){
+    public ResponseEntity<List<TecnicoDTO>> findAll() {
         List<Tecnico> list = tecnicoService.findAll();
         List<TecnicoDTO> listDTO = list.stream().map(obj -> new TecnicoDTO(obj)).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(listDTO);
     }
+
     @PostMapping
-    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO){
+    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO) {
         Tecnico newObj = tecnicoService.create(objDTO);
-        URI uri= ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newObj.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(newObj.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id,@Valid @RequestBody TecnicoDTO tecnicoDTO){
+        Tecnico oldObj = tecnicoService.update(id, tecnicoDTO);
+        return ResponseEntity.ok().body(new TecnicoDTO(oldObj));
+
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<TecnicoDTO> delete(@PathVariable Integer id){
+        tecnicoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
