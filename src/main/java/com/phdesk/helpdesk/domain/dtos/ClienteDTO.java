@@ -1,48 +1,43 @@
-package com.phdesk.helpdesk.domain;
+package com.phdesk.helpdesk.domain.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.phdesk.helpdesk.domain.Cliente;
+import com.phdesk.helpdesk.domain.Tecnico;
 import com.phdesk.helpdesk.domain.enums.Perfil;
-import org.hibernate.validator.constraints.br.CPF;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity
-public abstract class Pessoa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ClienteDTO {
     protected Integer id;
+    @NotNull(message = "O campo nome está em branco!")
     protected String nome;
-    @CPF
-    @Column(unique = true)
+    @NotNull(message = "O campo cpf está em branco!")
     protected String cpf;
-
-    @Column(unique = true)
+    @NotNull(message = "O campo email está em branco!")
     protected String email;
+    @NotNull(message = "O campo senha está em branco!")
     protected String senha;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "PERFIS")
     protected Set<Integer> perfis = new HashSet<>();
     @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate dataCriacao = LocalDate.now();
 
-    public Pessoa() {
-        super();
+    public ClienteDTO(){
         addPerfil(Perfil.CLIENTE);
+
     }
 
-    public Pessoa(Integer id, String nome, String cpf, String email, String senha) {
-        this.id = id;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.email = email;
-        this.senha = senha;
-        addPerfil(Perfil.CLIENTE);
+    public ClienteDTO(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.cpf = cliente.getCpf();
+        this.email = cliente.getEmail();
+        this.senha = cliente.getSenha();
+        this.perfis = cliente.getPerfis().stream().map(x-> x.getCodigo()).collect(Collectors.toSet());
+        this.dataCriacao = cliente.getDataCriacao();
     }
 
     public Integer getId() {
@@ -86,11 +81,11 @@ public abstract class Pessoa {
     }
 
     public Set<Perfil> getPerfis() {
-        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+        return perfis.stream().map(x-> Perfil.toEnum(x)).collect(Collectors.toSet());
     }
 
-    public void addPerfil(Perfil perfil) {
-        this.perfis.add(perfil.getCodigo());
+    public void addPerfil(Perfil perfis) {
+        this.perfis.add(perfis.getCodigo());
     }
 
     public LocalDate getDataCriacao() {
@@ -99,17 +94,5 @@ public abstract class Pessoa {
 
     public void setDataCriacao(LocalDate dataCriacao) {
         this.dataCriacao = dataCriacao;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Pessoa pessoa)) return false;
-        return Objects.equals(getId(), pessoa.getId()) && Objects.equals(getCpf(), pessoa.getCpf());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getCpf());
     }
 }
