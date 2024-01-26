@@ -8,6 +8,7 @@ import com.phdesk.helpdesk.repositories.PessoaRepository;
 import com.phdesk.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.phdesk.helpdesk.services.exceptions.ObjectnotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class ClienteService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
 
     public Cliente findByID(Integer id) {
         Optional<Cliente> obj = clienteRepository.findById(id);
@@ -32,6 +36,7 @@ public class ClienteService {
 
     public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         validaPorCpfEmail(objDTO);
         Cliente newObj = new Cliente(objDTO);
         return clienteRepository.save(newObj);

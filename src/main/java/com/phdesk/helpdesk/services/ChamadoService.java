@@ -10,6 +10,7 @@ import com.phdesk.helpdesk.domain.enums.Status;
 import com.phdesk.helpdesk.repositories.ChamadoRepository;
 import com.phdesk.helpdesk.services.exceptions.ObjectnotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class ChamadoService {
     @Autowired
     private ClienteService clienteService;
 
+
     public Chamado findById(Integer id) {
         Optional<Chamado> obj = chamadoRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectnotFoundException("Objeto não encontrado! ID: " + id));
@@ -38,6 +40,7 @@ public class ChamadoService {
     }
 
     public Chamado create(ChamadoDTO objDTO) {
+        objDTO.setId(null);
         return chamadoRepository.save(newChamado(objDTO));
     }
 
@@ -57,7 +60,7 @@ public class ChamadoService {
             chamado.setId(obj.getId());
         }
 
-        if(obj.getStatus().equals(2)){
+        if (obj.getStatus().equals(2)) {
             chamado.setDataFechamento(LocalDate.now());
         }
 
