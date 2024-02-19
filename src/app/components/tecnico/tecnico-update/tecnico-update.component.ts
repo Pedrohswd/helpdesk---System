@@ -5,12 +5,13 @@ import { ToastrService } from 'ngx-toastr';
 import { Tecnico } from 'src/app/models/tecnico';
 import { TecnicoService } from 'src/app/services/tecnico.service';
 
+
 @Component({
-  selector: 'app-tecnico-create',
-  templateUrl: './tecnico-create.component.html',
-  styleUrls: ['./tecnico-create.component.css']
+  selector: 'app-tecnico-update',
+  templateUrl: './tecnico-update.component.html',
+  styleUrls: ['./tecnico-update.component.css']
 })
-export class TecnicoCreateComponent implements OnInit {
+export class TecnicoUpdateComponent implements OnInit {
 
   tecnico: Tecnico = {
     id: '',
@@ -39,7 +40,7 @@ export class TecnicoCreateComponent implements OnInit {
       && this.email.valid && this.senha.valid
   }
 
-  create(): void {
+  update(): void {
     this.service.create(this.tecnico).subscribe(resposta => {
       this.toast.success('Técnico cadastrado com sucesso', 'Cadastro');
       this.router.navigate(["tecnicos"])
